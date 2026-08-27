@@ -129,19 +129,17 @@ That integer feeds the Erlang C calculations. If it does not exceed offered
 load, the interval is reported as overloaded with a failing service level —
 never as `NaN`, infinity, or a misleadingly high percentage.
 
-### A floating-point trap worth knowing about
+### Exact staffing reports as exact
 
-These two conversions must round-trip: staffing that exactly meets requirement
-has to yield the required productive agents back. Naively they do not, because
-`1 - S` is not exactly representable in binary. At the default 30% shrinkage,
-63 productive agents grosses up to 90 scheduled, and `90 * 0.7` evaluates to
-`62.999999999999993` — so the interval would report one agent short and a
-failing service level for staffing that is exactly right. It recurs 143 times
-below 5,000 agents.
+Shrinkage is applied by dividing, and checked by multiplying back. Done
+naively those two steps disagree, because 0.7 has no exact binary
+representation: 63 productive agents gross up to 90 scheduled, and 90 x 0.7
+comes back as 62.999999999999993. The interval would then report one agent
+short, with a failing service level, for staffing that is exactly right. It
+happens 143 times below 5,000 agents.
 
-The engine applies a `1e-9` tolerance to both conversions, which fixes the
-round trip without changing any correct answer. A property test guards it
-across the full parameter grid.
+The calculation carries a small tolerance so the round trip holds. If you
+roster precisely to requirement, the visual agrees that you have.
 
 ## Staffing gap
 
