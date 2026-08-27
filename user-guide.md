@@ -146,6 +146,11 @@ DIVIDE(
 ![The WeightedHandleTime measure in the formula
 bar](images/08-weighted-handle-time.png)
 
+The screenshot is from the sample model, so the names differ from the examples
+above — the measure is `WeightedHandleTime` over a table called
+`intervalsample`. Call yours whatever suits your model; only the shape of the
+calculation matters.
+
 ### Check it worked
 
 Put `Weighted AHT` in a card visual with no filters. It should look like a
@@ -169,7 +174,12 @@ Drop the visual on the canvas and fill the field wells:
 Until the first three are filled the visual tells you which one is still
 missing rather than drawing anything.
 
-![All nine field wells filled in](images/03-field-wells.png)
+![The field wells, with all nine filled
+in](images/03-field-wells.png)
+
+The screenshot shows nine wells because it also has the four what-if overrides
+from [step 6](#step-6-let-report-readers-change-the-parameters) mapped. Only
+the five above matter for now.
 
 ### The date hierarchy trap
 
@@ -250,37 +260,38 @@ reader gets a slicer.
 
    | | |
    |---|---|
-   | Name | `Shrinkage` |
+   | Name | `Shrinkage %` |
+   | Data type | Whole number |
    | Minimum | `0` |
-   | Maximum | `60` |
+   | Maximum | `100` |
    | Increment | `1` |
    | Default | `30` |
 
 3. Leave **Add slicer to this page** ticked.
 4. Click **Create**.
+5. Drag the **measure** Power BI just created — `Shrinkage % Value`, not the
+   column — into the visual's **Shrinkage %** field well.
 
 ![The completed parameter dialog: whole number, 0 to 100, increment 1, default
 30](images/05-whatif-dialog.png)
 
-Power BI creates three things, and the distinction matters:
+Step 5 is the one people get wrong, because Power BI creates three objects and
+they sit together under the same name:
 
 | What | Named | Use it? |
 |---|---|---|
-| A table | `Shrinkage` | No |
-| A column inside it | `Shrinkage` | **No** |
-| A measure | `Shrinkage Value` | **Yes** |
+| A table | `Shrinkage %` | No |
+| A column inside it | `Shrinkage %` | **No** |
+| A measure | `Shrinkage % Value` | **Yes** |
 
 The measure looks like this:
 
 ```dax
-Shrinkage Value = SELECTEDVALUE('Shrinkage'[Shrinkage], 30)
+Shrinkage % Value = SELECTEDVALUE('Shrinkage %'[Shrinkage %], 30)
 ```
 
 `SELECTEDVALUE` reads whatever the slicer is set to, falling back to your
 default when nothing is selected.
-
-5. Drag the **measure** — `Shrinkage Value`, not the column — into the visual's
-   **Shrinkage %** field well.
 
 In the Data pane the two sit together under the same table name and are easy to
 confuse. The measure carries a calculator icon; the column does not. Dropping
@@ -320,8 +331,10 @@ shrinkage and leave the rest fixed.
 
 ### Use whole numbers, not decimals
 
-**These take `80`, not `0.8`.** Build your parameter over `0` to `95`, not `0`
-to `1`.
+**These take `80`, not `0.8`.** Build your parameter over `0` to `100`, not `0`
+to `1`. The **Suggested range** column above is about what values are sensible
+to expose to a reader, not what the field accepts — the field accepts whole
+numbers, and a narrower slider is a courtesy, not a requirement.
 
 A parameter built over 0–1 is the easy mistake and would otherwise compute
 staffing for a 0.8% service-level target quite happily. The visual catches it
@@ -457,13 +470,16 @@ Other cards:
 
 Under **X axis → Label format → Custom**:
 
+Doubled tokens pad with a leading zero; single ones do not. Shown for
+**Monday 2 March 2026, 09:05**:
+
 | Token | Gives | Token | Gives |
 |---|---|---|---|
-| `yyyy` `yy` | 2026, 26 | `HH` `H` | 14, 14 |
-| `MMMM` `MMM` | March, Mar | `hh` `h` | 02, 2 |
-| `MM` `M` | 03, 3 | `mm` | 30 |
-| `dddd` `ddd` | Monday, Mon | `tt` | PM |
-| `dd` `d` | 02, 2 | | |
+| `yyyy` `yy` | 2026, 26 | `HH` `H` | 09, 9 |
+| `MMMM` `MMM` | March, Mar | `hh` `h` | 09, 9 |
+| `MM` `M` | 03, 3 | `mm` `m` | 05, 5 |
+| `dddd` `ddd` | Monday, Mon | `ss` `s` | 00, 0 |
+| `dd` `d` | 02, 2 | `tt` | AM |
 
 **Put literal text in single quotes.** `HH'h'mm` gives `14h30`; without quotes
 the `h` is read as a token. `''` is an apostrophe.
@@ -489,7 +505,7 @@ Your scheduled measure is summing rather than levelling. Scheduled agents is a
 headcount *at a moment*, not a quantity that accumulates.
 
 **"This field takes whole-number percentages."**
-A what-if parameter is returning a decimal. Build it over 0–95, not 0–1.
+A what-if parameter is returning a decimal. Build it over 0–100, not 0–1.
 
 **A gap in the scheduled line.**
 Those intervals have no roster value. A blank is treated as unknown, not as
