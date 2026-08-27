@@ -113,8 +113,8 @@ and an average of averages is not the average.
 > two averages gives **550**. Offered load comes out nearly three times too
 > high, and the visual will confidently recommend staffing for it.
 
-The visual cannot detect this. Nothing in the data distinguishes a correctly
-weighted measure from a badly weighted one.
+**Nothing will warn you.** The chart looks entirely normal either way, so this
+is one to check yourself rather than wait to be told about.
 
 ### If your data has total handle seconds
 
@@ -223,24 +223,29 @@ Together: "80% answered within 20 seconds."
 | Maximum occupancy | 85% | Ceiling on the share of productive time spent handling contacts |
 | Interval length | 30 minutes | **Must match your data's grain** |
 
-### Interval length is not detected
+### Set interval length to match your data
 
-It has to match the grain of your interval column, and the visual does not
-guess. Guessing would mean inferring from the spacing between values, which
-goes wrong in exactly the cases that matter — overnight gaps, intervals removed
-by a filter, a queue that only opens at 08:00. A wrong value silently changes
-every number on the chart.
+If your rows are 15 minutes apart, set 15. If they are hourly, set 60. This is
+not detected automatically, and it is not a preference — it tells the
+calculation how long each interval lasts.
+
+**Get it wrong and every number on the chart is wrong**, with nothing to
+indicate it. Staffing for a 30-minute interval labelled as 15 comes out roughly
+half what you need. It is worth checking before you trust the first chart you
+draw.
 
 ### About maximum occupancy
 
 Occupancy is the share of an agent's productive time spent actually handling
 contacts. Sustained occupancy above roughly 85% is a well-documented driver of
-burnout and attrition, which is why this is enforced as a **hard constraint**
-and not just reported.
+burnout and attrition, so this setting is a **ceiling, not a target** — staffing
+is raised until occupancy falls below it.
 
-It is why this visual sometimes asks for more agents than a calculator that
-only targets service level. Those calculators can return answers implying 90%+
-occupancy. This one will not, unless you raise the ceiling yourself.
+**This is usually why the numbers differ from an online Erlang calculator.**
+Many of those solve only for service level and will happily return an answer
+implying 90%+ occupancy. This one adds agents until occupancy is under your
+ceiling, even when service level was already met. If you want to compare like
+for like, raise the ceiling and the answers converge.
 
 ---
 
@@ -341,10 +346,11 @@ staffing for a 0.8% service-level target quite happily. The visual catches it
 and tells you to multiply by 100 rather than calculating with it. Zero is
 allowed — 0% shrinkage is a real setting.
 
-### Interval length is deliberately not overridable
+### There is no override for interval length
 
-It has to match your data's grain, which is a property of the model rather than
-a question a reader should be able to change.
+Interval length describes your data rather than your assumptions, so it stays
+in the Format pane where you set it once. Readers can change the four settings
+above; they cannot change what an interval is.
 
 ---
 
@@ -360,9 +366,10 @@ surpluses shaded](images/09-visual-clean.png)
 | Shaded band | The gap. Red and hatched when short, green when surplus |
 | Faint dotted line | Required *productive* agents, before shrinkage. Off by default |
 
-The hatch on an understaffed band is deliberate, not decoration — colour-vision
-deficiency, greyscale printing and high-contrast mode each remove hue, so
-shortfall is marked by texture as well as colour.
+Shortfalls are hatched as well as coloured, so they survive being printed in
+black and white, projected badly, or read by someone with colour-vision
+deficiency. If you export the report, the understaffed intervals still stand
+out.
 
 ### The summary metrics
 
@@ -404,8 +411,9 @@ scheduled agents, the gap, expected service level and occupancy.
 ![A tooltip on a three-queue interval, with the per-queue
 breakdown](images/07-tooltip.png)
 
-That chain is deliberately complete so you can reconcile any interval against a
-spreadsheet by hand.
+Every figure that went into the answer is there, so you can reconcile any
+interval against a spreadsheet by hand — useful when someone questions a
+staffing number.
 
 ---
 
@@ -432,16 +440,17 @@ Mapping a queue field calculates each queue separately and adds the resulting
 agent counts together.
 
 This is the **no-pooling assumption**: each queue is staffed by its own people.
-It is the conservative reading, and matches how most contact centres actually
-schedule.
+It matches how most contact centres actually schedule, and it errs towards more
+staff rather than fewer.
 
 **If your agents genuinely handle all queues from one pool, do not map the
 queue field.** Pooling more traffic into one queue needs *fewer* total agents,
 so calculating them separately will overstate what you need.
 
-Service level and occupancy are not aggregated across queues — there is no
-honest single number for "the service level across three queues" — so a
-multi-queue interval shows the per-queue breakdown in its tooltip instead.
+Service level and occupancy are shown per queue rather than combined. A single
+service-level figure across three separately staffed queues would be
+misleading, so hover a multi-queue interval and the tooltip breaks it down
+queue by queue.
 
 ---
 
@@ -512,21 +521,23 @@ Those intervals have no roster value. A blank is treated as unknown, not as
 zero agents, so the line breaks rather than dropping to the floor.
 
 **"Queue grouping requires a licence."**
-Per-queue and pooled staffing give different answers, so the visual will not
-guess which you meant. Remove the queue field or upgrade.
+Splitting by queue needs a licence. Without one, remove the queue field — the
+visual then treats your traffic as a single pooled queue, which asks for
+*fewer* agents than staffing the queues separately would. Or assign yourself a
+licence in the Microsoft 365 admin centre.
 
 ---
 
 ## What this visual does not do
 
-Version 1 is deliberately narrow:
+This release sizes staffing for a forecast you already have. It does not:
 
-- No schedule or shift generation
-- No break or lunch optimisation
-- No multi-skill or skill-based routing
-- No abandonment modelling (Erlang A), retrials or callbacks
-- No forecasting — it sizes staffing for a forecast you supply
-- No writeback to your data
+- Generate schedules or shifts
+- Optimise breaks or lunches
+- Handle multi-skill or skill-based routing
+- Model abandonment (Erlang A), retrials or callbacks
+- Produce the forecast itself — you supply that
+- Write anything back to your data
 
 **Erlang C assumes** Poisson arrivals, exponentially distributed handle times,
 no abandonment, and infinite queue patience. Real queues abandon, which makes
