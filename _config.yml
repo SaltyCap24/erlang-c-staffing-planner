@@ -1,0 +1,11 @@
+title: Erlang C Staffing Planner
+description: Interval-level contact-centre staffing for Power BI
+theme: jekyll-theme-cayman
+
+# Markdown files become extensionless URLs, so /user-guide rather than
+# /user-guide.html. The listing's help URL should stay stable for the life of
+# the offer, and an extension is the kind of thing that gets restructured.
+permalink: pretty
+
+exclude:
+  - README.md
