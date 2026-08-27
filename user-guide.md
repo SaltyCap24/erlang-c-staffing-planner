@@ -33,23 +33,11 @@ download**. It installs from inside Power BI.
 3. Choose **Get more visuals**.
 4. Search for **Erlang C Staffing Planner** and click **Add**.
 
-![The Visualizations pane with the ... menu open, showing "Get more visuals"
-and "Import a visual from a file"](images/01-import-visual.png)
+![The Visualizations pane with the ... menu open, showing "Get more
+visuals"](images/01-import-visual.png)
 
 The icon then appears in the Visualizations pane and stays there for new
-reports. Updates arrive automatically, which is the main practical reason to
-prefer this route.
-
-### If someone gave you a `.pbiviz` file
-
-Pre-release builds and privately shared copies come as a file. From the same
-**⋯** menu choose **Import a visual from a file**, select the `.pbiviz`, and
-confirm the caution dialog.
-
-A file installed this way is **pinned to that report and never updates itself**.
-To move to a newer build you import the new file, and Power BI Desktop caches
-the visual for the session -- so close Desktop completely and reopen the report,
-or the old code keeps running and the import looks like it did nothing.
+reports. Updates arrive automatically.
 
 ### If your organisation deploys visuals centrally
 
