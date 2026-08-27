@@ -20,15 +20,16 @@ Published by **WORK4WIFI LLC**.
 | [How the calculation works](calculation-guide) | Erlang C, offered load, occupancy and shrinkage, worked through |
 | [Evaluation mode](evaluation-mode) | What the free tier includes and what a licence unlocks |
 
+| [Support](support) | Common problems, how to reach us, licensing and billing |
+| [Privacy policy](privacy) | What the visual accesses, and what it transmits |
+
 ## Support
 
 Questions, problems, or a staffing number you cannot reconcile:
 **cap@work4wifi.com**
 
-Please include the visual version — it is shown in the Format pane under
-**About** — and what you expected versus what you saw. Please do not send
-customer data; a description of the shape of your data is almost always
-enough.
+Check the [support page](support) first — most problems are one of half a dozen
+things, and each has a short answer there.
 
 ## What it does not do
 
