@@ -1,0 +1,18 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+// The Cayman theme is built for open-source projects, so it puts a "View on
+// GitHub" button in every page header. This is product documentation for a
+// paid visual, and the repository behind it holds only these docs — sending
+// customers to it invites them to look for source that deliberately is not
+// there.
+.page-header .btn {
+    display: none;
+}
+
+// With the button gone the header keeps its button-sized bottom padding.
+.page-header {
+    padding-bottom: 2rem;
+}
