@@ -23,18 +23,52 @@ works as long as it is consistent: 15, 30 or 60 minutes.
 
 ---
 
-## Step 1: Import the visual
+## Step 1: Add the visual
+
+If you bought the visual from Microsoft AppSource, **there is no file to
+download**. It installs from inside Power BI.
 
 1. In Power BI Desktop, open the **Visualizations** pane.
 2. Click the **⋯** at the bottom of the icon list.
-3. Choose **Import a visual from a file** and select the `.pbiviz`.
-4. Confirm the caution dialog.
+3. Choose **Get more visuals**.
+4. Search for **Erlang C Staffing Planner** and click **Add**.
 
-> Installing from AppSource instead? Use **Get more visuals** and search for
-> the visual by name. That route keeps it updated automatically.
+![The Visualizations pane with the ... menu open, showing "Get more visuals"
+and "Import a visual from a file"](images/01-import-visual.png)
 
-![The Visualizations pane with the ... menu open, showing "Import a visual
-from a file"](images/01-import-visual.png)
+The icon then appears in the Visualizations pane and stays there for new
+reports. Updates arrive automatically, which is the main practical reason to
+prefer this route.
+
+### If someone gave you a `.pbiviz` file
+
+Pre-release builds and privately shared copies come as a file. From the same
+**⋯** menu choose **Import a visual from a file**, select the `.pbiviz`, and
+confirm the caution dialog.
+
+A file installed this way is **pinned to that report and never updates itself**.
+To move to a newer build you import the new file, and Power BI Desktop caches
+the visual for the session -- so close Desktop completely and reopen the report,
+or the old code keeps running and the import looks like it did nothing.
+
+### If your organisation deploys visuals centrally
+
+Some tenants block AppSource and have an administrator publish approved visuals
+instead. If **Get more visuals** shows an **Organizational** tab, or shows
+nothing at all, ask whoever administers Power BI in your organisation to add
+it.
+
+### Licences
+
+Buying through AppSource gives you licences to assign, not a key to enter.
+Assign them per user in the [Microsoft 365 admin
+center](https://admin.microsoft.com). After a licence is assigned it can take
+up to an hour to be recognised -- refresh the browser, or restart Desktop.
+
+Without a licence the visual still runs in **evaluation mode**, which
+calculates your own data with your own parameters over a limited number of
+intervals. See [evaluation mode](evaluation-mode) for what is and is not
+included.
 
 ---
 
