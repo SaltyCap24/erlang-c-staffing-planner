@@ -4,7 +4,7 @@ title: Evaluation mode
 
 # Evaluation mode
 
-Without a licence, the visual runs in **evaluation mode**. It is not a timed
+Without a license, the visual runs in **evaluation mode**. It is not a timed
 trial and it does not expire — you can use it for as long as you like.
 
 The point of it is to let you check the arithmetic against your own data before
@@ -17,7 +17,7 @@ grain, and none of the roster comparison is there.
 
 ---
 
-## What you get without a licence
+## What you get without a license
 
 **Your own data.** No sample-data restriction, no demo mode. Load your forecast
 and it calculates your forecast.
@@ -25,7 +25,7 @@ and it calculates your forecast.
 **Twelve intervals**, calculated and charted. That limit is the same whatever
 your interval length.
 
-**Every staffing parameter honoured** — target service level, answer threshold,
+**Every staffing parameter honored** — target service level, answer threshold,
 shrinkage, maximum occupancy and interval length. Both the Format pane settings
 and the what-if override fields work, so you can move a slicer and watch the
 requirement move.
@@ -46,7 +46,7 @@ Axes, axis titles and the legend all render normally.
 
 ---
 
-## What a licence adds
+## What a license adds
 
 **Your whole range.** A day, a week, a month — whatever your filters select,
 rather than twelve intervals.
@@ -73,32 +73,32 @@ reach a steady state.
 
 ## Two things worth knowing
 
-**A queue field will not calculate without a licence.** Rather than quietly
+**A queue field will not calculate without a license.** Rather than quietly
 ignoring the field, the visual stops and says so. Staffing queues separately
 produces a higher total than pooling them, so ignoring the field would give
 you a number matching neither your spreadsheet nor the licensed version.
-Remove the field to see pooled staffing, or add a licence.
+Remove the field to see pooled staffing, or add a license.
 
 **A scheduled-agents field is ignored rather than refused.** Unlike a queue
 field it does not change required staffing, so leaving it mapped costs you
 nothing — the numbers you are checking stay correct. A banner explains why the
 comparison is missing.
 
-If a licence check cannot complete — an offline moment, an unsupported
+If a license check cannot complete — an offline moment, an unsupported
 embedding context — the visual falls back to evaluation mode rather than
 showing nothing. A lookup that failed is not evidence that you are unlicensed.
 
 ---
 
-## Getting a licence
+## Getting a license
 
-Licences are bought and assigned through Microsoft, not through us. Assign them
+Licenses are bought and assigned through Microsoft, not through us. Assign them
 per user in the [Microsoft 365 admin center](https://admin.microsoft.com).
 
-Everyone who **views** a report needs a licence, not only the person who built
+Everyone who **views** a report needs a license, not only the person who built
 it. An unlicensed viewer sees evaluation mode.
 
-After assigning a licence it can take up to an hour to be recognised. Refresh
+After assigning a license it can take up to an hour to be recognized. Refresh
 the browser, or restart Power BI Desktop.
 
 Questions: [support](support), or **cap@work4wifi.com**.

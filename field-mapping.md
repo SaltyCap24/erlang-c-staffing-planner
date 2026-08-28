@@ -100,7 +100,7 @@ agent counts together on the chart.
 
 This is the no-pooling assumption: each queue is staffed by its own people.
 It is the conservative reading, and the one that matches how most contact
-centres actually schedule. If your agents genuinely handle all queues from one
+centers actually schedule. If your agents genuinely handle all queues from one
 pool, do not map the queue field — pooling more traffic into one queue needs
 *fewer* total agents, and calculating them separately will overstate what you
 need.
@@ -119,9 +119,9 @@ multi-queue interval shows the per-queue breakdown in its tooltip instead.
 | Faint dotted line | Required *productive* agents, before shrinkage. Off by default |
 
 The **hatch** on an understaffed band is deliberate, not decoration.
-Colour-vision deficiency, greyscale printing and Windows high-contrast mode
+Color-vision deficiency, grayscale printing and Windows high-contrast mode
 each remove hue as a channel, so shortfall is marked by texture as well as
-colour and survives all three.
+color and survives all three.
 
 ## Letting report readers adjust the parameters
 
@@ -198,19 +198,19 @@ Every card in the Format pane:
 | **Data labels** | Show/hide, which series, text formatting, number format |
 | **Summary metrics** | Show/hide, text formatting, number format |
 | **Assumptions line** | Show/hide, text formatting |
-| **Colours** | Required, scheduled, understaffed, surplus |
+| **Colors** | Required, scheduled, understaffed, surplus |
 
 ### Text formatting
 
 Every card that draws words carries the same set: **font family, size, bold,
-italic, underline, alignment** and **colour**.
+italic, underline, alignment** and **color**.
 
-Colour has a **Match report theme** switch, on by default. Leave it on and the
-text follows the report's own colour, so the visual stays readable on a dark
-theme. Turn it off and the colour picker takes over — an explicit choice
+Color has a **Match report theme** switch, on by default. Leave it on and the
+text follows the report's own color, so the visual stays readable on a dark
+theme. Turn it off and the color picker takes over — an explicit choice
 rather than something that silently breaks when someone applies a dark theme.
 
-Two colours ignore the setting on purpose, because they carry information
+Two colors ignore the setting on purpose, because they carry information
 rather than decoration: an understaffed metric stays red, and so does the
 evaluation-mode truncation notice.
 
@@ -272,11 +272,11 @@ Two things happen automatically:
 - **They thin out.** 96 numbers across 600 pixels is a smear, not information,
   so labels drop to every second or third interval the same way axis labels do.
   A larger text size means fewer labels.
-- **They avoid each other.** With both series labelled, each number sits on the
+- **They avoid each other.** With both series labeled, each number sits on the
   far side of its own line from the other one — so they do not stack up where
   the lines run close together, which is exactly when someone turns labels on.
 
-Each label carries a halo in the background colour so digits stay legible over
+Each label carries a halo in the background color so digits stay legible over
 a gridline or a shaded gap band.
 
 ### Axis label format

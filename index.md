@@ -4,7 +4,7 @@ title: Erlang C Staffing Planner
 
 # Erlang C Staffing Planner
 
-Interval-level contact-centre staffing for Power BI. The visual takes your
+Interval-level contact-center staffing for Power BI. The visual takes your
 forecast and tells you how many agents each interval needs to hit your service
 level — using Erlang C, entirely inside Power BI, with no data leaving your
 report.
@@ -18,7 +18,7 @@ Published by **WORK4WIFI LLC**.
 | [User guide](user-guide) | Setup, field mapping, the weighted handle-time measure, what-if parameters, troubleshooting |
 | [Field mapping](field-mapping) | What each field well expects, and the measures behind them |
 | [How the calculation works](calculation-guide) | Erlang C, offered load, occupancy and shrinkage, worked through |
-| [Evaluation mode](evaluation-mode) | What the free tier includes and what a licence unlocks |
+| [Evaluation mode](evaluation-mode) | What the free tier includes and what a license unlocks |
 
 | [Support](support) | Common problems, how to reach us, licensing and billing |
 | [Privacy policy](privacy) | What the visual accesses, and what it transmits |

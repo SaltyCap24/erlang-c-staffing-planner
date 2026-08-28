@@ -39,21 +39,21 @@ visuals"](images/01-import-visual.png)
 The icon then appears in the Visualizations pane and stays there for new
 reports. Updates arrive automatically.
 
-### If your organisation deploys visuals centrally
+### If your organization deploys visuals centrally
 
 Some tenants block AppSource and have an administrator publish approved visuals
 instead. If **Get more visuals** shows an **Organizational** tab, or shows
-nothing at all, ask whoever administers Power BI in your organisation to add
+nothing at all, ask whoever administers Power BI in your organization to add
 it.
 
-### Licences
+### Licenses
 
-Buying through AppSource gives you licences to assign, not a key to enter.
+Buying through AppSource gives you licenses to assign, not a key to enter.
 Assign them per user in the [Microsoft 365 admin
-center](https://admin.microsoft.com). After a licence is assigned it can take
-up to an hour to be recognised -- refresh the browser, or restart Desktop.
+center](https://admin.microsoft.com). After a license is assigned it can take
+up to an hour to be recognized -- refresh the browser, or restart Desktop.
 
-Without a licence the visual still runs in **evaluation mode**, which
+Without a license the visual still runs in **evaluation mode**, which
 calculates your own data with your own parameters over a limited number of
 intervals. See [evaluation mode](evaluation-mode) for what is and is not
 included.
@@ -230,7 +230,7 @@ not detected automatically, and it is not a preference — it tells the
 calculation how long each interval lasts.
 
 **Get it wrong and every number on the chart is wrong**, with nothing to
-indicate it. Staffing for a 30-minute interval labelled as 15 comes out roughly
+indicate it. Staffing for a 30-minute interval labeled as 15 comes out roughly
 half what you need. It is worth checking before you trust the first chart you
 draw.
 
@@ -366,8 +366,8 @@ surpluses shaded](images/09-visual-clean.png)
 | Shaded band | The gap. Red and hatched when short, green when surplus |
 | Faint dotted line | Required *productive* agents, before shrinkage. Off by default |
 
-Shortfalls are hatched as well as coloured, so they survive being printed in
-black and white, projected badly, or read by someone with colour-vision
+Shortfalls are hatched as well as colored, so they survive being printed in
+black and white, projected badly, or read by someone with color-vision
 deficiency. If you export the report, the understaffed intervals still stand
 out.
 
@@ -440,7 +440,7 @@ Mapping a queue field calculates each queue separately and adds the resulting
 agent counts together.
 
 This is the **no-pooling assumption**: each queue is staffed by its own people.
-It matches how most contact centres actually schedule, and it errs towards more
+It matches how most contact centers actually schedule, and it errs towards more
 staff rather than fewer.
 
 **If your agents genuinely handle all queues from one pool, do not map the
@@ -459,11 +459,11 @@ queue by queue.
 ![The Format pane, with the Legend card expanded](images/10-format-pane.png)
 
 Every text element takes font, size, bold, italic, underline, alignment and
-colour: X axis, Y axis, axis titles, legend, data labels, summary metrics and
+color: X axis, Y axis, axis titles, legend, data labels, summary metrics and
 the assumptions line.
 
-Colour has a **Match report theme** switch, on by default, so text follows your
-report's own colour and stays readable on a dark theme. Turn it off to choose
+Color has a **Match report theme** switch, on by default, so text follows your
+report's own color and stays readable on a dark theme. Turn it off to choose
 your own.
 
 Other cards:
@@ -473,7 +473,7 @@ Other cards:
 - **Y axis**, **Data labels**, **Summary metrics** — display units and decimal
   places.
 - **Lines** — solid, dashed or dotted, and width, for each series.
-- **Colours** — required, scheduled, understaffed, surplus.
+- **Colors** — required, scheduled, understaffed, surplus.
 
 ### Custom date formats
 
@@ -520,11 +520,11 @@ A what-if parameter is returning a decimal. Build it over 0–100, not 0–1.
 Those intervals have no roster value. A blank is treated as unknown, not as
 zero agents, so the line breaks rather than dropping to the floor.
 
-**"Queue grouping requires a licence."**
-Splitting by queue needs a licence. Without one, remove the queue field — the
+**"Queue grouping requires a license."**
+Splitting by queue needs a license. Without one, remove the queue field — the
 visual then treats your traffic as a single pooled queue, which asks for
 *fewer* agents than staffing the queues separately would. Or assign yourself a
-licence in the Microsoft 365 admin centre.
+license in the Microsoft 365 admin center.
 
 ---
 
@@ -533,7 +533,7 @@ licence in the Microsoft 365 admin centre.
 This release sizes staffing for a forecast you already have. It does not:
 
 - Generate schedules or shifts
-- Optimise breaks or lunches
+- Optimize breaks or lunches
 - Handle multi-skill or skill-based routing
 - Model abandonment (Erlang A), retrials or callbacks
 - Produce the forecast itself — you supply that

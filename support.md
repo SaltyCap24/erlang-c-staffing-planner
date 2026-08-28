@@ -37,11 +37,11 @@ volumes scaled or anonymised.
 
 ## Licensing and billing
 
-Purchases, licence assignment and cancellation are handled by Microsoft, not by
-us. Assign or remove licences per user in the [Microsoft 365 admin
+Purchases, license assignment and cancellation are handled by Microsoft, not by
+us. Assign or remove licenses per user in the [Microsoft 365 admin
 center](https://admin.microsoft.com).
 
-After a licence is assigned it can take up to an hour to be recognised. Refresh
+After a license is assigned it can take up to an hour to be recognized. Refresh
 the browser, or restart Power BI Desktop.
 
 For anything to do with billing, invoices or refunds, contact Microsoft
@@ -49,12 +49,12 @@ support rather than us.
 
 ## Known limitations
 
-Licence enforcement is not available in Publish to Web, PaaS embedding, Power BI
+License enforcement is not available in Publish to Web, PaaS embedding, Power BI
 Report Server, national or regional clouds, or REST-API export to PDF and
 PowerPoint. That is a Power BI platform limitation rather than a choice.
 
 This release sizes staffing for a forecast you supply. It does not generate
-schedules, optimise breaks, handle multi-skill routing, or model abandonment.
+schedules, optimize breaks, handle multi-skill routing, or model abandonment.
 The [user guide](user-guide#what-this-visual-does-not-do) has the full list.
 
 ---

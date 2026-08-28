@@ -27,7 +27,7 @@ instant if there were no queueing.
 ## Erlang B, and why the recurrence matters
 
 Erlang C is derived from Erlang B. The closed form of Erlang B divides `A^N` by
-`N!`, and both overflow a double inside ordinary contact-centre range: `171!`
+`N!`, and both overflow a double inside ordinary contact-center range: `171!`
 is `Infinity`, so the ratio becomes `NaN` from 171 agents up — roughly 1,020
 contacts in a half-hour at a 300-second AHT.
 
@@ -279,7 +279,7 @@ knows what the answer should be for a handful of real intervals.
 
 Version 1 is deliberately narrow. Out of scope: abandonment and Erlang A,
 retrials and callbacks, multi-skill or skill-based routing, queueing
-simulation, forecast generation, schedule or break optimisation, and hiring
+simulation, forecast generation, schedule or break optimization, and hiring
 plans.
 
 Erlang C assumes Poisson arrivals, exponentially distributed handle times,
