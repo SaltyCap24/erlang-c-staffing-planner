@@ -62,8 +62,39 @@ assumptions do not hold.
 SL = 1 - C * exp(-(N - A) * (T / AHT))
 ```
 
-An overloaded interval reports `SL = 0`. An idle interval — no contacts —
-reports service level as **not applicable**, not 100%. See below.
+An idle interval — no contacts — reports service level as **not applicable**,
+not 100%. See below.
+
+### The zero on an overloaded interval is a floor, not a forecast
+
+An overloaded interval reports `SL = 0`, and it is worth being precise about
+what that means, because it is not a prediction.
+
+Erlang C solves a **steady state**. When productive agents fall at or below
+offered load there is no steady state: arrivals outpace service indefinitely,
+the queue grows without bound, and no stationary distribution exists to ask
+"what share are answered within T seconds" of. The limit as time goes to
+infinity is genuinely zero, which is why zero is the mathematically correct
+value *for the model*.
+
+Your interval is not infinite. Over a real half hour the queue starts near
+empty, agents answer continuously, and early callers are served quickly — the
+true service level for that interval might be anywhere from 30% to 50%. The
+model simply has no way to tell you which, because a finite-horizon transient
+queue depends on the backlog carried in from the previous interval, the arrival
+profile within the interval, and whether callers abandon. None of that is
+available here, and inventing a number would be worse than declining to.
+
+So `SL = 0` means **"this interval is unservable at this roster"**, not "no
+contact is answered in time". Treat it as a flag, not a figure.
+
+One consequence: overloaded intervals contribute 0% at full contact weight to
+the contact-weighted **Forecast SLA**, which makes that headline pessimistic
+whenever any interval is underwater. That is deliberate — an interval you
+cannot serve should drag the day's number down — but it does mean Forecast SLA
+mixes computed percentages with unservable-interval sentinels. If you need a
+service-level figure for the servable part of the day only, filter the
+overloaded intervals out first.
 
 ## Occupancy
 
