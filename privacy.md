@@ -15,7 +15,7 @@ the report is open. It collects nothing, stores nothing, and transmits nothing.
 
 ## What the visual accesses
 
-Only the fields you map into it: interval, contact volume, average handle time,
+Only the fields you map into it: interval, contact volume, weighted handle time,
 and optionally scheduled agents and queue name. It reads them to perform the
 staffing calculation and draw the chart.
 
@@ -46,7 +46,7 @@ own privacy terms.
 
 Where a license applies, the visual asks Power BI which service plans are
 assigned to the current user. That check happens between Power BI and Microsoft
-using Microsoft's Licensing API. We receive no personal data from it — the
+using Microsoft's Licensing API. We receive no personal data from it - the
 visual sees only whether a usable plan exists.
 
 ## Third-party components

@@ -7,9 +7,9 @@ wrong staffing numbers.
 
 | Field well | Required | Put in it |
 |---|---|---|
-| **Interval** | Yes | The *start* of each staffing interval. A date/time column is best. Any sortable category works, provided it separates one day from the next — see below. |
+| **Interval** | Yes | The *start* of each staffing interval. A date/time column is best. Any sortable category works, provided it separates one day from the next - see below. |
 | **Forecast contacts** | Yes | Contacts offered in the interval. A plain `SUM`. |
-| **Average handle time (seconds)** | Yes | A weighted average at the interval grain. **See below.** |
+| **Weighted Handle Time (Seconds)** | Yes | A weighted average at the interval grain. **See below.** |
 | **Scheduled agents** | No | Agents rostered for the interval. Staffing *level*, not a sum of row values. |
 
 ### The interval field has to separate the days
@@ -31,12 +31,12 @@ the signature of folded days.
 Without the first three the visual tells you which one is missing rather than
 drawing anything.
 
-## Average handle time is the field to get right
+## Weighted handle time is the field to get right
 
 Three of the four numbers are simple sums. This one is not, and it is the most
 likely source of a wrong answer that still looks plausible.
 
-Dropping a column called `AHT` into the field well makes Power BI average it —
+Dropping a column called `AHT` into the field well makes Power BI average it -
 and an average of averages is not the average. If one interval handled 500
 contacts at 200 seconds and the next handled 5 contacts at 900 seconds, the
 true weighted AHT is 207 seconds. Averaging the two averages gives 550. Offered
@@ -57,7 +57,7 @@ DIVIDE(
 ```
 
 The sample dataset in `sample-data/` stores `HandleSeconds` for exactly this
-reason — it makes the correct measure the natural one to write.
+reason - it makes the correct measure the natural one to write.
 
 If your source only gives you an average per interval, reconstruct the total
 first:
@@ -88,7 +88,7 @@ The **Interval length** setting in the Format pane has to match the grain of
 your Interval field. It is not detected from the data.
 
 That is deliberate. Detection would have to guess from the spacing between
-values, and it would guess wrong in exactly the cases that matter — overnight
+values, and it would guess wrong in exactly the cases that matter - overnight
 gaps, missing intervals after filtering, a queue that only opens at 08:00.
 A wrong guess silently changes every staffing number on the chart, so the
 setting is explicit and the default is 30 minutes.
@@ -101,7 +101,7 @@ agent counts together on the chart.
 This is the no-pooling assumption: each queue is staffed by its own people.
 It is the conservative reading, and the one that matches how most contact
 centers actually schedule. If your agents genuinely handle all queues from one
-pool, do not map the queue field — pooling more traffic into one queue needs
+pool, do not map the queue field - pooling more traffic into one queue needs
 *fewer* total agents, and calculating them separately will overstate what you
 need.
 
@@ -113,8 +113,8 @@ multi-queue interval shows the per-queue breakdown in its tooltip instead.
 
 | Mark | Means |
 |---|---|
-| Solid line | **Required scheduled agents** — the answer, after shrinkage |
-| Dashed line | **Scheduled agents** — what you have rostered |
+| Solid line | **Required scheduled agents** - the answer, after shrinkage |
+| Dashed line | **Scheduled agents** - what you have rostered |
 | Shaded band | The gap between them. Red and hatched when short, green when surplus |
 | Faint dotted line | Required *productive* agents, before shrinkage. Off by default |
 
@@ -126,7 +126,7 @@ color and survives all three.
 ## Letting report readers adjust the parameters
 
 The Format pane is **author-only**. Someone reading a published report cannot
-open it, so out of the box they cannot ask "what if shrinkage were 35%?" — the
+open it, so out of the box they cannot ask "what if shrinkage were 35%?" - the
 exact question this visual exists to answer.
 
 Four optional field wells fix that. Bind a Power BI what-if parameter to one
@@ -153,7 +153,7 @@ The reader moves the slicer; required staffing recalculates.
 
 ### Units: whole-number percentages
 
-These wells take **80**, not **0.8** — the same convention as the Format pane.
+These wells take **80**, not **0.8** - the same convention as the Format pane.
 
 A what-if parameter built over `0` to `1` is the easy mistake, and it would
 otherwise compute staffing for a 0.8% service-level target quite happily. So a
@@ -171,7 +171,7 @@ Under the summary metrics is a line reading something like:
 
 It reflects whatever actually drove the calculation, so a reader moving a
 what-if slicer sees the assumptions move with it. A staffing number is not a
-fact on its own — it is a fact *given* those parameters — and a screenshot of
+fact on its own - it is a fact *given* those parameters - and a screenshot of
 the chart would otherwise be unattributable.
 
 It trims to the two parameters that move staffing most on a narrow visual, and
@@ -207,7 +207,7 @@ italic, underline, alignment** and **color**.
 
 Color has a **Match report theme** switch, on by default. Leave it on and the
 text follows the report's own color, so the visual stays readable on a dark
-theme. Turn it off and the color picker takes over — an explicit choice
+theme. Turn it off and the color picker takes over - an explicit choice
 rather than something that silently breaks when someone applies a dark theme.
 
 Two colors ignore the setting on purpose, because they carry information
@@ -216,7 +216,7 @@ evaluation-mode truncation notice.
 
 Alignment means what it can for each element. In the summary tiles and the
 assumptions line it is alignment within the box. For axis ticks, data labels
-and the legend — text with no box — it shifts the label relative to the point
+and the legend - text with no box - it shifts the label relative to the point
 it is pinned to. Y-axis ticks stay right-anchored regardless, because any
 other anchor walks them into the plot.
 
@@ -226,7 +226,7 @@ other anchor walks them into the plot.
 and decimal places.
 
 Display units default to **Auto**, which only abbreviates once the digits stop
-being individually meaningful — six figures. Turning "1,200 agents" into "1.2K"
+being individually meaningful - six figures. Turning "1,200 agents" into "1.2K"
 loses precision a staffing plan needs, so that is not something the visual does
 uninvited. Set **Thousands** or **Millions** explicitly if you want it sooner.
 
@@ -253,12 +253,12 @@ the volume is.
 Forecast SLA is **weighted by contacts**, because service level is a ratio of
 contacts answered in time to contacts offered. Averaging the per-interval
 percentages instead would let a quiet overnight interval at 100% cancel out a
-peak interval at 40% — on the sample data that inflates the figure from 62.4%
+peak interval at 40% - on the sample data that inflates the figure from 62.4%
 to 75.3%, which would be a comfortable and completely wrong number to plan
 against.
 
 Zero-volume intervals carry no weight, so an overnight stretch cannot drag the
-forecast either way. An overloaded interval counts as 0%, not as missing —
+forecast either way. An overloaded interval counts as 0%, not as missing -
 dropping it would flatter the result.
 
 ### Data labels
@@ -273,7 +273,7 @@ Two things happen automatically:
   so labels drop to every second or third interval the same way axis labels do.
   A larger text size means fewer labels.
 - **They avoid each other.** With both series labeled, each number sits on the
-  far side of its own line from the other one — so they do not stack up where
+  far side of its own line from the other one - so they do not stack up where
   the lines run close together, which is exactly when someone turns labels on.
 
 Each label carries a halo in the background color so digits stay legible over
@@ -281,8 +281,8 @@ a gridline or a shaded gap band.
 
 ### Axis label format
 
-**X axis → Label format** offers presets — time only, date only, weekday and
-time, and so on — or **Custom** for your own pattern.
+**X axis → Label format** offers presets - time only, date only, weekday and
+time, and so on - or **Custom** for your own pattern.
 
 | Token | Gives | Token | Gives |
 |---|---|---|---|
@@ -297,7 +297,7 @@ quotes the `h` is read as a token and you get `14230`. `''` is an apostrophe,
 so `HH:mm 'o''clock'` gives `14:30 o'clock`. Month and weekday names follow the
 report's locale.
 
-Non-date intervals are left alone — a category axis is already whatever you
+Non-date intervals are left alone - a category axis is already whatever you
 made it.
 
 ### Axis label rotation
@@ -308,7 +308,7 @@ survive before the axis starts dropping every second or third one. The chart
 reserves the extra height automatically.
 
 Automatic stays horizontal until the labels stop fitting, then angles them. It
-never goes vertical on its own — 90° costs a lot of chart height, and that is a
+never goes vertical on its own - 90° costs a lot of chart height, and that is a
 trade worth opting into rather than having sprung on you by a resize.
 
 The y-axis is titled **Agents**; the x-axis carries the display name of
@@ -328,7 +328,7 @@ it by hand.
 1. Read the forecast contacts and weighted AHT from the tooltip.
 2. Offered load is `contacts × AHT ÷ interval seconds`. For 300 contacts at 280
    seconds in a 30-minute interval: `300 × 280 ÷ 1800 = 46.7` Erlangs.
-3. Required productive agents will be somewhere just above that — typically 10
+3. Required productive agents will be somewhere just above that - typically 10
    to 20 percent higher at an 80/20 target.
 4. Required scheduled will be that divided by `1 − shrinkage`.
 

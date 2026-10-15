@@ -8,7 +8,7 @@ out. Written to be readable by a workforce analyst, not just by a developer.
 | Symbol | Meaning | Source |
 |---|---|---|
 | `V` | Forecast contacts offered in the interval | Field well |
-| `AHT` | Average handle time, seconds | Field well |
+| `AHT` | Weighted handle time, seconds | Field well |
 | `I` | Interval length, seconds | Format pane |
 | `SL_target` | Target service level, decimal | Format pane |
 | `T` | Answer-time threshold, seconds | Format pane |
@@ -21,14 +21,14 @@ out. Written to be readable by a workforce analyst, not just by a developer.
 A = V * AHT / I
 ```
 
-`A` is traffic intensity in Erlangs — the average number of agents busy at any
+`A` is traffic intensity in Erlangs - the average number of agents busy at any
 instant if there were no queueing.
 
 ## Erlang B, and why the recurrence matters
 
 Erlang C is derived from Erlang B. The closed form of Erlang B divides `A^N` by
 `N!`, and both overflow a double inside ordinary contact-center range: `171!`
-is `Infinity`, so the ratio becomes `NaN` from 171 agents up — roughly 1,020
+is `Infinity`, so the ratio becomes `NaN` from 171 agents up - roughly 1,020
 contacts in a half-hour at a 300-second AHT.
 
 This engine uses the recurrence instead:
@@ -40,7 +40,7 @@ B(n) = A * B(n-1) / (n + A * B(n-1))
 
 Every intermediate value stays inside `(0, 1]`, so there is no overflow at any
 load. At extremely low load and very high agent counts the value underflows to
-exactly `0`, which is the correct limit and stays benign — service level then
+exactly `0`, which is the correct limit and stays benign - service level then
 evaluates to 1, not `NaN`.
 
 ## Probability of waiting
@@ -62,7 +62,7 @@ assumptions do not hold.
 SL = 1 - C * exp(-(N - A) * (T / AHT))
 ```
 
-An idle interval — no contacts — reports service level as **not applicable**,
+An idle interval - no contacts - reports service level as **not applicable**,
 not 100%. See below.
 
 ### The zero on an overloaded interval is a floor, not a forecast
@@ -78,7 +78,7 @@ infinity is genuinely zero, which is why zero is the mathematically correct
 value *for the model*.
 
 Your interval is not infinite. Over a real half hour the queue starts near
-empty, agents answer continuously, and early callers are served quickly — the
+empty, agents answer continuously, and early callers are served quickly - the
 true service level for that interval might be anywhere from 30% to 50%. The
 model simply has no way to tell you which, because a finite-horizon transient
 queue depends on the backlog carried in from the previous interval, the arrival
@@ -90,8 +90,8 @@ contact is answered in time". Treat it as a flag, not a figure.
 
 One consequence: overloaded intervals contribute 0% at full contact weight to
 the contact-weighted **Forecast SLA**, which makes that headline pessimistic
-whenever any interval is underwater. That is deliberate — an interval you
-cannot serve should drag the day's number down — but it does mean Forecast SLA
+whenever any interval is underwater. That is deliberate - an interval you
+cannot serve should drag the day's number down - but it does mean Forecast SLA
 mixes computed percentages with unservable-interval sentinels. If you need a
 service-level figure for the servable part of the day only, filter the
 overloaded intervals out first.
@@ -123,7 +123,7 @@ N = max(floor(A) + 1, ceil(A / O_max))
 ```
 
 which satisfies the first two by construction. Occupancy falls monotonically as
-`N` grows, so every later candidate satisfies them too — incrementing can only
+`N` grows, so every later candidate satisfies them too - incrementing can only
 tighten service level, and the two constraints can never be traded off against
 one another.
 
@@ -132,7 +132,7 @@ stops at the first `N` meeting service level alone will, at moderate to high
 load, return a headcount whose occupancy is unachievable. At `A = 60` Erlangs
 with an 80%/20s target, a service-level-only search returns 67 agents running
 at 89.6% occupancy; enforcing an 85% cap returns 71. At 30% shrinkage that is
-96 scheduled agents versus 102 — six per interval.
+96 scheduled agents versus 102 - six per interval.
 
 The search carries the Erlang B recurrence forward one term per increment
 rather than rebuilding it, which keeps it linear in the answer. In practice it
@@ -157,7 +157,7 @@ AvailableProductive = floor(ScheduledAgents * (1 - S))
 ```
 
 That integer feeds the Erlang C calculations. If it does not exceed offered
-load, the interval is reported as overloaded with a failing service level —
+load, the interval is reported as overloaded with a failing service level -
 never as `NaN`, infinity, or a misleadingly high percentage.
 
 ### Exact staffing reports as exact
@@ -188,7 +188,7 @@ to be consistent and documented.
 | Case | Rule | Why |
 |---|---|---|
 | `V = 0` | Required staff `0`; service level and occupancy **not applicable** (null) | Reporting 100% would count an overnight interval with no contacts as a service-level success, inflating the "target met" summary metric. A null keeps it out of both numerator and denominator. |
-| `V > 0` and `AHT <= 0` | Input error on the AHT field | A handle time of zero against real volume is a data problem, not a staffing answer. |
+| `V > 0` and `AHT <= 0` | Input error on the Weighted Handle Time field | A handle time of zero against real volume is a data problem, not a staffing answer. |
 | `V = 0` and `AHT` null | Accepted | There is nothing to handle, so there is no handle time to require. |
 | Negative `V`, `AHT`, `I` or scheduled agents | Input error | |
 | Null, `NaN` or infinite input | Typed error, surfaced as a data-quality message | Never coerced to a default. |
@@ -199,13 +199,13 @@ to be consistent and documented.
 
 Three of the four numeric fields are straightforward:
 
-- **Forecast contacts** — sum.
-- **Scheduled agents** — must represent staffing *at the interval grain*, not a
+- **Forecast contacts** - sum.
+- **Scheduled agents** - must represent staffing *at the interval grain*, not a
   sum of repeated row-level values.
-- **Interval length** — a setting, not inferred. A user-selected value is
+- **Interval length** - a setting, not inferred. A user-selected value is
   better than silently calculating the wrong requirement.
 
-**Average handle time is the exception, and it is the most likely source of a
+**Weighted handle time is the exception, and it is the most likely source of a
 wrong answer in the field.** A naive `AVERAGE(AHT)` averages averages across
 whatever grain the visual is displaying, and the offered load comes out wrong
 in a way that looks entirely plausible. Use a correctly weighted measure:
@@ -237,24 +237,24 @@ of the same mathematics, written in BigInt rational arithmetic
 |---|---|---|
 | Formula | Erlang B recurrence | Erlang B closed form |
 | Arithmetic | IEEE-754 doubles | Exact integer rationals |
-| Overflow | Impossible by construction | Impossible — BigInt has no ceiling |
+| Overflow | Impossible by construction | Impossible - BigInt has no ceiling |
 | Rounding | Every operation | None, except the final conversion |
 
 They share no code path, no formula and no number representation, so agreement
 between them is evidence rather than a tautology. At 500 Erlangs and 589
-agents the oracle's numerator runs to about 1,590 decimal digits — a
+agents the oracle's numerator runs to about 1,590 decimal digits - a
 calculation a double cannot express at all, and the reason the closed form had
 to be abandoned in the engine in the first place.
 
 Service level adds one transcendental term. Its exponent is exactly rational,
 so the oracle computes it exactly and evaluates the exponential by fixed-point
-Taylor series to 60 decimal places — about 44 digits beyond a double.
+Taylor series to 60 decimal places - about 44 digits beyond a double.
 
 **Worst observed disagreement: 1.1e-15 relative**, a few units in the last
 place. The test threshold is 1e-13, roughly two orders of magnitude clear of
 the noise floor.
 
-The oracle is also tested for discrimination — that it *rejects* the factorial
+The oracle is also tested for discrimination - that it *rejects* the factorial
 implementation at the loads where that overflows, accepts it below its ceiling,
 and rejects a recurrence with a deliberate sign error. A comparison everything
 passes would prove nothing.
@@ -284,7 +284,7 @@ plans.
 
 Erlang C assumes Poisson arrivals, exponentially distributed handle times,
 no abandonment, and infinite queue patience. Real queues abandon, which means
-Erlang C is generally **conservative** — it tends to recommend slightly more
+Erlang C is generally **conservative** - it tends to recommend slightly more
 staff than a model with abandonment would. That is usually the safer direction
 for a staffing plan, but it is an assumption worth stating to anyone using the
 numbers.

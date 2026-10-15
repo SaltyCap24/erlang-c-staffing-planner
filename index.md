@@ -6,7 +6,7 @@ title: Erlang C Staffing Planner
 
 Interval-level contact-center staffing for Power BI. The visual takes your
 forecast and tells you how many agents each interval needs to hit your service
-level — using Erlang C, entirely inside Power BI, with no data leaving your
+level - using Erlang C, entirely inside Power BI, with no data leaving your
 report.
 
 Published by **WORK4WIFI LLC**.
@@ -28,7 +28,7 @@ Published by **WORK4WIFI LLC**.
 Questions, problems, or a staffing number you cannot reconcile:
 **cap@work4wifi.com**
 
-Check the [support page](support) first — most problems are one of half a dozen
+Check the [support page](support) first - most problems are one of half a dozen
 things, and each has a short answer there.
 
 ## What it does not do

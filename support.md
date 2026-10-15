@@ -11,7 +11,7 @@ full:
 
 | What you are seeing | Usually |
 |---|---|
-| Staffing looks far too high | Average handle time is a plain column instead of a weighted measure. [Step 3](user-guide#step-3-the-one-measure-you-must-build) |
+| Staffing looks far too high | Weighted handle time is a plain column instead of a weighted measure. [Step 3](user-guide#step-3-the-one-measure-you-must-build) |
 | Only one point per day on the chart | The interval field is bound to the Date Hierarchy instead of the plain field |
 | Staffing doubles when you change interval length | The scheduled measure is summing rather than levelling. Scheduled agents is a headcount at a moment, not a running total |
 | "This field takes whole-number percentages" | A what-if parameter was built over 0 to 1 instead of 0 to 100 |

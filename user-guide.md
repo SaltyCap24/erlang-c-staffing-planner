@@ -1,10 +1,10 @@
-# Erlang C Staffing Planner — user guide
+# Erlang C Staffing Planner - user guide
 
 Calculate how many agents each interval needs, compare it to what you have
 rostered, and see where the day is short.
 
 This guide takes about fifteen minutes end to end. The one step worth not
-skipping is [Average handle time](#step-3-the-one-measure-you-must-build) — it
+skipping is [Weighted handle time](#step-3-the-one-measure-you-must-build) - it
 is the only field that will silently give you wrong answers if you get it wrong.
 
 ---
@@ -17,7 +17,7 @@ is the only field that will silently give you wrong answers if you get it wrong.
 | Interval data | One row per interval, with contact volume and handle time |
 | Roster data | Optional. Agents scheduled per interval |
 
-Interval data usually comes out of the ACD or WFM platform — Five9, Genesys,
+Interval data usually comes out of the ACD or WFM platform - Five9, Genesys,
 NICE, Talkdesk, Amazon Connect, Cisco and similar all export it. Any grain
 works as long as it is consistent: 15, 30 or 60 minutes.
 
@@ -68,12 +68,12 @@ Your table needs, at minimum:
 |---|---|---|
 | Interval start | `2026-03-02 09:30` | Date/time. The **start** of the interval |
 | Contacts | `210` | Contacts offered in that interval |
-| Handle seconds | `66394` | **Total** seconds, not an average — see step 3 |
+| Handle seconds | `66394` | **Total** seconds, not an average - see step 3 |
 | Queue | `Billing` | Optional |
 | Scheduled agents | `67` | Optional |
 
 If your source gives you an *average* handle time rather than a total, that is
-fine — step 3 covers both.
+fine - step 3 covers both.
 
 ### Check the interval column
 
@@ -102,10 +102,10 @@ three queues over five days and it says 15, your days have folded together.
 
 ## Step 3: The one measure you must build
 
-**Average handle time cannot be a plain column.** This is the single most
+**Weighted handle time cannot be a plain column.** This is the single most
 common way to get a confidently wrong answer out of this visual.
 
-Dropping a column called `AHT` into the field well makes Power BI average it —
+Dropping a column called `AHT` into the field well makes Power BI average it -
 and an average of averages is not the average.
 
 > One interval handles 500 contacts at 200 seconds. The next handles 5 contacts
@@ -147,14 +147,14 @@ DIVIDE(
 bar](images/08-weighted-handle-time.png)
 
 The screenshot is from the sample model, so the names differ from the examples
-above — the measure is `WeightedHandleTime` over a table called
+above - the measure is `WeightedHandleTime` over a table called
 `intervalsample`. Call yours whatever suits your model; only the shape of the
 calculation matters.
 
 ### Check it worked
 
 Put `Weighted AHT` in a card visual with no filters. It should look like a
-plausible handle time for your operation — a few hundred seconds for voice. If
+plausible handle time for your operation - a few hundred seconds for voice. If
 it comes out in the thousands, the measure is summing rather than averaging.
 
 ---
@@ -167,7 +167,7 @@ Drop the visual on the canvas and fill the field wells:
 |---|---|---|
 | **Interval** | Your interval start column | Yes |
 | **Forecast contacts** | Contacts (Sum) | Yes |
-| **Average handle time (seconds)** | `Weighted AHT` | Yes |
+| **Weighted Handle Time (Seconds)** | `Weighted AHT` | Yes |
 | **Scheduled agents** | Scheduled (Sum) | No |
 | **Queue or group** | Queue | No |
 
@@ -184,7 +184,7 @@ the five above matter for now.
 ### The date hierarchy trap
 
 Power BI creates an automatic date hierarchy and will drop your interval column
-in as **Date Hierarchy** — which throws away the time and collapses a week of
+in as **Date Hierarchy** - which throws away the time and collapses a week of
 half-hours into seven points.
 
 Click the dropdown on the field chip in the well and pick the plain field name
@@ -194,7 +194,7 @@ instead:
 dropdown with the plain field ticked instead of Date
 Hierarchy](images/04-date-hierarchy.png)
 
-On the left is the broken state — if your well looks like that, the visual is
+On the left is the broken state - if your well looks like that, the visual is
 being handed a hierarchy rather than timestamps. On the right is the fix.
 
 To turn it off everywhere: **File → Options and settings → Options → Data Load
@@ -206,7 +206,7 @@ To turn it off everywhere: **File → Options and settings → Options → Data 
 
 Open the **Format** pane. Under **Staffing parameters**:
 
-**Service level (SLA)** — the two halves of your service target:
+**Service level (SLA)** - the two halves of your service target:
 
 | Setting | Default | Means |
 |---|---|---|
@@ -226,19 +226,20 @@ Together: "80% answered within 20 seconds."
 ### Set interval length to match your data
 
 If your rows are 15 minutes apart, set 15. If they are hourly, set 60. This is
-not detected automatically, and it is not a preference — it tells the
+not detected automatically, and it is not a preference - it tells the
 calculation how long each interval lasts.
 
-**Get it wrong and every number on the chart is wrong**, with nothing to
-indicate it. Staffing for a 30-minute interval labeled as 15 comes out roughly
-half what you need. It is worth checking before you trust the first chart you
-draw.
+Interval length is the denominator of offered load, so this setting moves
+every number on the chart. Half-hourly data set to 15 doubles the load: a peak
+interval that truly needs 88 agents asks for 173. Set to 60 instead and the
+same interval asks for 45. Nothing on the chart indicates which happened, so
+it is worth a glance before you rely on the figures.
 
 ### About maximum occupancy
 
 Occupancy is the share of an agent's productive time spent actually handling
 contacts. Sustained occupancy above roughly 85% is a well-documented driver of
-burnout and attrition, so this setting is a **ceiling, not a target** — staffing
+burnout and attrition, so this setting is a **ceiling, not a target** - staffing
 is raised until occupancy falls below it.
 
 **This is usually why the numbers differ from an online Erlang calculator.**
@@ -252,7 +253,7 @@ for like, raise the ceiling and the answers converge.
 ## Step 6: Let report readers change the parameters
 
 The Format pane is **author-only**. Someone reading your published report
-cannot open it — so out of the box they cannot ask "what if shrinkage were
+cannot open it - so out of the box they cannot ask "what if shrinkage were
 35%?", which is often the whole reason they opened the report.
 
 Four optional field wells fix that. Bind a what-if parameter to one and the
@@ -274,8 +275,8 @@ reader gets a slicer.
 
 3. Leave **Add slicer to this page** ticked.
 4. Click **Create**.
-5. Drag the **measure** Power BI just created — `Shrinkage % Value`, not the
-   column — into the visual's **Shrinkage %** field well.
+5. Drag the **measure** Power BI just created - `Shrinkage % Value`, not the
+   column - into the visual's **Shrinkage %** field well.
 
 ![The completed parameter dialog: whole number, 0 to 100, increment 1, default
 30](images/05-whatif-dialog.png)
@@ -313,10 +314,10 @@ side](images/06-whatif-slicer.png)
 Four parameters is a lot of slicers. An arrangement that keeps them out of the
 way:
 
-- **Across the top** — a date range slicer, and day-of-week buttons for quick
+- **Across the top** - a date range slicer, and day-of-week buttons for quick
   filtering
 - **The visual** taking the bulk of the canvas
-- **Down the right edge** — the four parameters as compact single-value cards,
+- **Down the right edge** - the four parameters as compact single-value cards,
   stacked
 
 That keeps every assumption visible and adjustable without crowding the chart,
@@ -338,13 +339,13 @@ shrinkage and leave the rest fixed.
 
 **These take `80`, not `0.8`.** Build your parameter over `0` to `100`, not `0`
 to `1`. The **Suggested range** column above is about what values are sensible
-to expose to a reader, not what the field accepts — the field accepts whole
+to expose to a reader, not what the field accepts - the field accepts whole
 numbers, and a narrower slider is a courtesy, not a requirement.
 
 A parameter built over 0–1 is the easy mistake and would otherwise compute
 staffing for a 0.8% service-level target quite happily. The visual catches it
 and tells you to multiply by 100 rather than calculating with it. Zero is
-allowed — 0% shrinkage is a real setting.
+allowed - 0% shrinkage is a real setting.
 
 ### There is no override for interval length
 
@@ -361,8 +362,8 @@ surpluses shaded](images/09-visual-clean.png)
 
 | Mark | Means |
 |---|---|
-| Solid line | **Required scheduled agents** — the answer, after shrinkage |
-| Dashed line | **Scheduled agents** — what you have rostered |
+| Solid line | **Required scheduled agents** - the answer, after shrinkage |
+| Dashed line | **Scheduled agents** - what you have rostered |
 | Shaded band | The gap. Red and hatched when short, green when surplus |
 | Faint dotted line | Required *productive* agents, before shrinkage. Off by default |
 
@@ -400,7 +401,7 @@ Under the metrics, the parameters that produced the numbers:
 
 It follows whatever actually drove the calculation, so a reader moving a
 what-if slicer watches the assumptions move with it. A staffing number is not a
-fact on its own — it is a fact *given* those parameters.
+fact on its own - it is a fact *given* those parameters.
 
 ### Tooltips
 
@@ -412,7 +413,7 @@ scheduled agents, the gap, expected service level and occupancy.
 breakdown](images/07-tooltip.png)
 
 Every figure that went into the answer is there, so you can reconcile any
-interval against a spreadsheet by hand — useful when someone questions a
+interval against a spreadsheet by hand - useful when someone questions a
 staffing number.
 
 ---
@@ -425,7 +426,7 @@ Pick your busiest interval and work it through:
 2. **Offered load** = `contacts × AHT ÷ interval seconds`.
    For 300 contacts at 280 seconds in a 30-minute interval:
    `300 × 280 ÷ 1800 = 46.7` Erlangs.
-3. **Required productive agents** will be somewhat above that — typically 10 to
+3. **Required productive agents** will be somewhat above that - typically 10 to
    20 percent higher at an 80/20 target.
 4. **Required scheduled** = that divided by `1 − shrinkage`.
 
@@ -468,12 +469,12 @@ your own.
 
 Other cards:
 
-- **X axis** — label format (seven presets plus custom patterns) and rotation.
+- **X axis** - label format (seven presets plus custom patterns) and rotation.
   Rotating fits far more labels before the axis starts dropping them.
-- **Y axis**, **Data labels**, **Summary metrics** — display units and decimal
+- **Y axis**, **Data labels**, **Summary metrics** - display units and decimal
   places.
-- **Lines** — solid, dashed or dotted, and width, for each series.
-- **Colors** — required, scheduled, understaffed, surplus.
+- **Lines** - solid, dashed or dotted, and width, for each series.
+- **Colors** - required, scheduled, understaffed, surplus.
 
 ### Custom date formats
 
@@ -498,7 +499,7 @@ the `h` is read as a token. `''` is an apostrophe.
 ## Troubleshooting
 
 **Required staffing looks far too high.**
-Almost always the AHT measure. Put it in a card and check it reads as a
+Almost always the Weighted Handle Time measure. Put it in a card and check it reads as a
 plausible handle time. See [step 3](#step-3-the-one-measure-you-must-build).
 
 **Only a handful of points on the chart, one per day.**
@@ -506,7 +507,7 @@ The interval field is bound to the Date Hierarchy. Use the field chip dropdown
 to pick the plain field.
 
 **Staffing changes when I switch interval length, but the data did not.**
-Correct — that setting tells the visual how long each interval is. Set it to
+Correct - that setting tells the visual how long each interval is. Set it to
 match your data's grain.
 
 **Scheduled staffing doubles when I change interval length.**
@@ -521,7 +522,7 @@ Those intervals have no roster value. A blank is treated as unknown, not as
 zero agents, so the line breaks rather than dropping to the floor.
 
 **"Queue grouping requires a license."**
-Splitting by queue needs a license. Without one, remove the queue field — the
+Splitting by queue needs a license. Without one, remove the queue field - the
 visual then treats your traffic as a single pooled queue, which asks for
 *fewer* agents than staffing the queues separately would. Or assign yourself a
 license in the Microsoft 365 admin center.
@@ -536,12 +537,12 @@ This release sizes staffing for a forecast you already have. It does not:
 - Optimize breaks or lunches
 - Handle multi-skill or skill-based routing
 - Model abandonment (Erlang A), retrials or callbacks
-- Produce the forecast itself — you supply that
+- Produce the forecast itself - you supply that
 - Write anything back to your data
 
 **Erlang C assumes** Poisson arrivals, exponentially distributed handle times,
 no abandonment, and infinite queue patience. Real queues abandon, which makes
-Erlang C generally **conservative** — it tends to recommend slightly more staff
+Erlang C generally **conservative** - it tends to recommend slightly more staff
 than a model with abandonment would. That is usually the safer direction for a
 staffing plan, but it is worth knowing.
 
